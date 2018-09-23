@@ -44,7 +44,6 @@
 #PROJECT = examples/blinky_rit
 #PROJECT = examples/adc_fir_dac
 #PROJECT = examples/freertos_blinky
-#PROJECT = examples/statechart
 
 #------------ sapi_examples ------------------------------------
 
@@ -86,8 +85,6 @@ PROJECT = sapi_examples/edu-ciaa-nxp/bare_metal/gpio/gpio_02_blinky
 #PROJECT = sapi_examples/edu-ciaa-nxp/bare_metal/wifi_esp01_esp8266/01_uart_bridge
 #PROJECT = sapi_examples/edu-ciaa-nxp/bare_metal/wifi_esp01_esp8266/02_http_server
 #PROJECT = sapi_examples/edu-ciaa-nxp/bare_metal/wifi_esp01_esp8266/03_thingspeak
-
-#PROJECT = sapi_examples/edu-ciaa-nxp/statecharts/statecharts_bare_metal
 
 #------------ Operating systems examples ------------
 

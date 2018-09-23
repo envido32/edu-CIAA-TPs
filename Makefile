@@ -40,7 +40,7 @@ include $(PROJECT)/Makefile
 
 include etc/target/$(TARGET).mk
 
-SYMBOLS += -D$(TARGET) -D$(BOARD) -std=c99
+SYMBOLS += -D$(TARGET) -D$(BOARD)
 
 include $(foreach MOD,$(PROJECT_MODULES),$(MOD)/Makefile)
 
@@ -103,17 +103,19 @@ $(foreach MOD,$(notdir $(PROJECT_MODULES)), $(eval $(call makemod,$(MOD),$(notdi
 
 %.o: %.c
 	@echo "*** compiling C file $< ***"
-	@$(CC) -MMD -MF $(OBJ_PATH)/$(@:.o=.d) $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
+	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
+	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -MM > $(OBJ_PATH)/$(@:.o=.d)
 
 %.o: %.S
 	@echo "*** compiling asm file $< ***"
-	@$(CC) -MMD -MF $(OBJ_PATH)/$(@:.o=.d) $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
+	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -o $(OBJ_PATH)/$@
+	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(CFLAGS) $(INCLUDES) -c $< -MM > $(OBJ_PATH)/$(@:.o=.d)
 
 -include $(wildcard $(OBJ_PATH)/*.d)
 
 $(PROJECT_NAME): $(foreach MOD,$(notdir $(PROJECT_MODULES)),lib$(MOD).a) $(PROJECT_OBJS)
 	@echo "*** linking project $@ ***"
-	@$(LD) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(PROJECT_NAME).axf $(PROJECT_OBJ_FILES) $(SLAVE_OBJ_FILE) -L$(OUT_PATH) $(addprefix -l,$(notdir $(PROJECT_MODULES))) $(addprefix -L,$(EXTERN_LIB_FOLDERS)) $(addprefix -l,$(notdir $(EXTERN_LIBS)))
+	@$(CROSS_PREFIX)gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(PROJECT_NAME).axf $(PROJECT_OBJ_FILES) $(SLAVE_OBJ_FILE) -L$(OUT_PATH) $(addprefix -l,$(notdir $(PROJECT_MODULES))) $(addprefix -L,$(EXTERN_LIB_FOLDERS)) $(addprefix -l,$(notdir $(EXTERN_LIBS)))
 	@$(CROSS_PREFIX)size $(OUT_PATH)/$(PROJECT_NAME).axf
 	@$(CROSS_PREFIX)objcopy -v -O binary $(OUT_PATH)/$(PROJECT_NAME).axf $(OUT_PATH)/$(PROJECT_NAME).bin
 	@echo "*** post-build ***"
