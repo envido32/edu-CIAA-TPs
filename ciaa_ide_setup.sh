@@ -32,7 +32,8 @@
 #
 
 arch=$(arch)
-ciaa_ide_path=$HOME/ciaa-ide
+ciaa_script_path=/vagrant
+ciaa_ide_path=/vagrant/ciaa-ide
 
 echo ""
 echo "**************************************"
@@ -45,12 +46,14 @@ then
 	echo "**********************************************"
 	echo "1) Installing additional packages (64-bits)..."
 	echo "**********************************************"
-	sudo apt-get install php5-cli libftdi-dev libusb-1.0-0-dev git git-gui libgtk2.0-0:i386 libxtst6:i386 libpangox-1.0-0:i386 libpangoxft-1.0-0:i386 libidn11:i386 libglu1-mesa:i386 libncurses5:i386 libudev1:i386 libusb-1.0:i386 libusb-0.1:i386 gtk2-engines-murrine:i386 libnss3-1d:i386 libwebkitgtk-1.0-0 gtkterm
+	sudo apt-get update
+	sudo apt-get -y install php5-cli --fix-missing
 else
 	echo "**********************************************"
 	echo "1) Installing additional packages (32-bits)..."
 	echo "**********************************************"
-	sudo apt-get install php5-cli libftdi-dev libusb-1.0-0-dev git git-gui libgtk2.0-0 libxtst6 libpangox-1.0-0 libpangoxft-1.0-0 libidn11 libglu1-mesa libncurses5 libudev1 libusb-1.0 libusb-0.1 gtk2-engines-murrine libnss3-1d libwebkitgtk-1.0-0 gtkterm
+	sudo apt-get update
+	sudo apt-get -y install php5-cli --fix-missing
 fi
 
 echo ""
@@ -82,7 +85,7 @@ wget http://ufpr.dl.sourceforge.net/project/openocd/openocd/0.9.0/openocd-0.9.0.
 tar -xvjf openocd-0.9.0.tar.bz2
 openocd_path=$ciaa_ide_path/openocd-0.9.0
 cd $openocd_path
-./configure --enable-ftdi 
+./configure --enable-ftdi
 make
 
 echo ""
@@ -97,7 +100,8 @@ echo "******************************************"
 echo "6) Cloning CIAA-Firmware GIT repository..."
 echo "******************************************"
 cd $ciaa_ide_path
-git clone --recursive https://github.com/ciaa/Firmware.git
+sudo apt-get -y install git
+git clone --recursive https://github.com/juliani2/Firmware.git
 
 echo ""
 if [ $arch = x86_64 ]
@@ -156,10 +160,25 @@ mv splash.bmp splash.bmp.old
 tar -xzvf ../../../splash.bmp.tar.gz
 
 echo ""
+echo "*****************************"
+echo "11) Move .cproject and .project..."
+echo "*****************************"
+mv $ciaa_script_path/project  $ciaa_ide_path/Firmware/.project
+mv $ciaa_script_path/cproject $ciaa_ide_path/Firmware/.cproject
+
+echo ""
+echo "*****************************"
+echo "12) Delete bz2 and gz files"
+echo "*****************************"
+cd $ciaa_ide_path
+rm *.gz
+rm *.bz2
+rm *.bz2.*
+
+echo ""
 echo "****************************************************************************************"
 echo "Done! You can run CIAA-IDE by executing"
 echo "$ $ciaa_ide_path/ciaa-ide"
 echo "Remember to install GNU ARM plug-in on Eclipse (http://gnuarmeclipse.livius.net/)."
 echo "Help > Install New Software... > Work with: http://gnuarmeclipse.sourceforge.net/updates"
 echo "****************************************************************************************"
-
