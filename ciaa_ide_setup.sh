@@ -32,28 +32,27 @@
 #
 
 arch=$(arch)
-ciaa_script_path=/vagrant
-ciaa_ide_path=/vagrant/ciaa-ide
+ciaa_ide_path=$HOME/ciaa-ide
 
 echo ""
 echo "**************************************"
 echo "Instalation script for CIAA-IDE-Linux."
 echo "**************************************"
-
 echo ""
+
 if [ $arch = x86_64 ]
 then
 	echo "**********************************************"
 	echo "1) Installing additional packages (64-bits)..."
 	echo "**********************************************"
 	sudo apt-get update
-	sudo apt-get -y install php5-cli --fix-missing
+	sudo apt-get -y install php7.2-cli libftdi-dev libusb-1.0-0-dev git git-gui libgtk2.0-0:i386 libxtst6:i386 libpangox-1.0-0:i386 libpangoxft-1.0-0:i386 libidn11:i386 libglu1-mesa:i386 libncurses5:i386 libudev1:i386 libusb-1.0:i386 libusb-0.1:i386 gtk2-engines-murrine:i386 libnss3-1d:i386 libwebkitgtk-1.0-0 gtkterm --fix-missing
 else
 	echo "**********************************************"
 	echo "1) Installing additional packages (32-bits)..."
 	echo "**********************************************"
 	sudo apt-get update
-	sudo apt-get -y install php5-cli --fix-missing
+	sudo apt-get -y install php7.2-cli libftdi-dev libusb-1.0-0-dev git git-gui libgtk2.0-0 libxtst6 libpangox-1.0-0 libpangoxft-1.0-0 libidn11 libglu1-mesa libncurses5 libudev1 libusb-1.0 libusb-0.1 gtk2-engines-murrine libnss3-1d libwebkitgtk-1.0-0 gtkterm --fix-missing
 fi
 
 echo ""
@@ -73,26 +72,30 @@ echo ""
 echo "*******************************************************"
 echo "4) Downloading and unpacking arm-none-eabi toolchain..."
 echo "*******************************************************"
-wget https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q1-update/+download/gcc-arm-none-eabi-4_9-2015q1-20150306-linux.tar.bz2
-tar -xjvf gcc-arm-none-eabi-4_9-2015q1-20150306-linux.tar.bz2
-toolchain_path=$ciaa_ide_path/gcc-arm-none-eabi-4_9-2015q1
+sudo apt-get remove binutils-arm-none-eabi gcc-arm-none-eabi
+sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa
+sudo apt-get update
+sudo apt-get -y install gcc-arm-embedded --fix-missing
+echo 'export PATH=$PATH:/usr/arm-none-eabi/bin' >> $HOME/.bashrc
 
 echo ""
 echo "*************************************************"
-echo "4) Downloading, unpacking and building OpenOCD..."
+echo "5) Downloading, unpacking and building OpenOCD..."
 echo "*************************************************"
-wget http://ufpr.dl.sourceforge.net/project/openocd/openocd/0.9.0/openocd-0.9.0.tar.bz2
-tar -xvjf openocd-0.9.0.tar.bz2
-openocd_path=$ciaa_ide_path/openocd-0.9.0
-cd $openocd_path
-./configure --enable-ftdi
-make
 
-echo ""
-echo "**********************************************"
-echo "5) Adding udev rules and restarting service..."
-echo "**********************************************"
-sudo cp $openocd_path/contrib/99-openocd.rules /etc/udev/rules.d/
+# wget https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/openocd/0.10.0-4/openocd_0.10.0.orig.tar.bz2
+# tar -xvjf openocd_0.10.0.orig.tar.bz2
+# openocd_path=$ciaa_ide_path/openocd_0.10.0.orig
+# cd $openocd_path
+# ./configure --enable-ftdi
+# make
+
+# echo ""
+# echo "**********************************************"
+# echo "6) Adding udev rules and restarting service..."
+# echo "**********************************************"
+# sudo cp $openocd_path/contrib/99-openocd.rules /etc/udev/rules.d/
+sudo apt-get -y install openocd --fix-missing # A partir de Ubuntu 16.04 esta actualizado en v0.9
 sudo service udev restart
 
 echo ""
@@ -100,8 +103,8 @@ echo "******************************************"
 echo "6) Cloning CIAA-Firmware GIT repository..."
 echo "******************************************"
 cd $ciaa_ide_path
-sudo apt-get -y install git
-git clone --recursive https://github.com/juliani2/Firmware.git
+sudo apt-get -y install git --fix-missing
+git clone --recursive https://github.com/ciaa/Firmware.git
 
 echo ""
 if [ $arch = x86_64 ]
@@ -109,14 +112,16 @@ then
 	echo "*****************************************"
 	echo "7) Downloading Eclipse C/C++ (64-bits)..."
 	echo "*****************************************"
-	wget http://eclipse.c3sl.ufpr.br/technology/epp/downloads/release/luna/SR2/eclipse-cpp-luna-SR2-linux-gtk-x86_64.tar.gz
-	tar -xzvf eclipse-cpp-luna-SR2-linux-gtk-x86_64.tar.gz
+	# wget http://eclipse.c3sl.ufpr.br/technology/epp/downloads/release/luna/SR2/eclipse-cpp-luna-SR2-linux-gtk-x86_64.tar.gz
+	# tar -xzvf eclipse-cpp-luna-SR2-linux-gtk-x86_64.tar.gz
+	sudo apt-get -y install eclipse-cdt --fix-missing
 else
 	echo "*****************************************"
 	echo "7) Downloading Eclipse C/C++ (32-bits)..."
 	echo "*****************************************"
-	wget http://eclipse.c3sl.ufpr.br/technology/epp/downloads/release/luna/SR2/eclipse-cpp-luna-SR2-linux-gtk.tar.gz
-	tar -xzvf eclipse-cpp-luna-SR2-linux-gtk.tar.gz
+	# wget http://eclipse.c3sl.ufpr.br/technology/epp/downloads/release/luna/SR2/eclipse-cpp-luna-SR2-linux-gtk.tar.gz
+	# tar -xzvf eclipse-cpp-luna-SR2-linux-gtk.tar.gz
+	sudo apt-get -y install eclipse-cdt --fix-missing
 fi
 
 echo ""
@@ -125,18 +130,23 @@ then
 	echo "**********************************************"
 	echo "8) Downloading and installing JRE (64-bits)..."
 	echo "**********************************************"
- 	wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jre-7u79-linux-x64.tar.gz
-	cd $ciaa_ide_path/eclipse
-	tar -xzvf ../jre-7u79-linux-x64.tar.gz
+ 	# wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jre-7u79-linux-x64.tar.gz
+	# cd $ciaa_ide_path/eclipse
+	# tar -xzvf ../jre-7u79-linux-x64.tar.gz
+	sudo apt-get -y install openjdk-11-jre --fix-missing
+
+	
 else
 	echo "**********************************************"
 	echo "8) Downloading and installing JRE (32-bits)..."
 	echo "**********************************************"
-	wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jre-7u79-linux-i586.tar.gz
-	cd $ciaa_ide_path/eclipse
-	tar -xzvf ../jre-7u79-linux-i586.tar.gz
+	# wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jre-7u79-linux-i586.tar.gz
+	# cd $ciaa_ide_path/eclipse
+	# tar -xzvf ../jre-7u79-linux-i586.tar.gz
+	sudo apt-get -y install openjdk-11-jre --fix-missing
+
 fi
-mv jre1.7.0_79/ jre/
+# mv jre1.7.0_79/ jre/
 
 echo ""
 echo "**************************"
@@ -149,15 +159,15 @@ echo \"Starting CIAA-IDE...\"
 $ciaa_ide_path/eclipse/eclipse &" > ciaa-ide
 chmod +x ciaa-ide
 
-echo ""
-echo "*****************************"
-echo "10) Updating splash screen..."
-echo "*****************************"
-cd $ciaa_ide_path
-wget http://www.proyecto-ciaa.com.ar/devwiki/lib/exe/fetch.php?media=docu:fw:bm:ide:splash.bmp.tar.gz -O splash.bmp.tar.gz
-cd eclipse/plugins/org.eclipse.platform_4.4.2.v20150204-1700/
-mv splash.bmp splash.bmp.old
-tar -xzvf ../../../splash.bmp.tar.gz
+# echo ""
+# echo "*****************************"
+# echo "10) Updating splash screen..."
+# echo "*****************************"
+# cd $ciaa_ide_path
+# wget http://www.proyecto-ciaa.com.ar/devwiki/lib/exe/fetch.php?media=docu:fw:bm:ide:splash.bmp.tar.gz -O splash.bmp.tar.gz
+# cd eclipse/plugins/org.eclipse.platform_4.4.2.v20150204-1700/
+# mv splash.bmp splash.bmp.old
+# tar -xzvf ../../../splash.bmp.tar.gz
 
 echo ""
 echo "*****************************"
