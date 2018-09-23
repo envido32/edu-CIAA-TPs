@@ -1,4 +1,17 @@
-# Firmware v2
+# Poncho RFID para eduCIAA
+
+Desarrollo de un Poncho RFID para eduCIAA.
+
+Todo el software tiene licencia GPL v3.0
+
+Todo el hardware tiene licencia CERN v1.2
+
+Para estudiar, compartir, modificar y mejorar.
+
+Proyecto CIAA: http://www.proyecto-ciaa.com.ar/
+
+
+# Firmware for CIAA v2
 Firmware v2 is a C language software development environment for embedded
 systems. At the moment it focuses specifically on the programming of 
 microcontrollers.
