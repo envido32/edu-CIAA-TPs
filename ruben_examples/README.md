@@ -1,76 +1,76 @@
-GuÌa de Ejercicios de RTOS.
-Los ejercicios 4, 7, 8, 9, 12 y 14 conforman el TP 3 y son de presentaciÛn obligatoria.
-El resto es de realizaciÛn opcional.
+Gu√≠a de Ejercicios de RTOS.
+Los ejercicios 4, 7, 8, 9, 12 y 14 conforman el TP 3 y son de presentaci√≥n obligatoria.
+El resto es de realizaci√≥n opcional.
 
 //---------------------------------------------------------------------------------------------------------------
 
 // 1) Escribir una funcion void Pulso (long tiempo_ms); que prenda un led durante tiempo_ms y una tarea
-// 	que us·ndola genere un tren de pulsos de TOn = 250ms / TOff = 750ms
+// 	que us√°ndola genere un tren de pulsos de TOn = 250ms / TOff = 750ms
 
 //	ok	---------------------------------------------------------------------------------------------------------------
 
-// 2) Escribir una tarea que usando la funciÛn Pulso genere un tren de pulsos con TOn = 100ms, 200ms, 300ms... y 
-//	con perÌodo fijo 1s.
+// 2) Escribir una tarea que usando la funci√≥n Pulso genere un tren de pulsos con TOn = 100ms, 200ms, 300ms... y 
+//	con per√≠odo fijo 1s.
 
 //	ok	---------------------------------------------------------------------------------------------------------------
 
-// 3) Escribir una tarea que haga de driver para un pulsador, con anti-rebote de 25ms. Otra tarea reflejar· el
+// 3) Escribir una tarea que haga de driver para un pulsador, con anti-rebote de 25ms. Otra tarea reflejar√° el
 //	estado del pulsador en un led.
 
 //	ok	---------------------------------------------------------------------------------------------------------------
 
-// 4) Agregar al ejercicio anterior la funcionalidad de medir el tiempo de presiÛn del pulsador. La otra tarea
-//	destellar· el led durante el tiempo medido.
+// 4) Agregar al ejercicio anterior la funcionalidad de medir el tiempo de presi√≥n del pulsador. La otra tarea
+//	destellar√° el led durante el tiempo medido.
 
 //	ok ---------------------------------------------------------------------------------------------------------------
 
-// 5) Una tarea sensa un pulsador y libera un sem·foro binario cuando confirma el fin de la pulsaciÛn. 
-//	La otra tarea destella un led cuando recibe el sem·foro. La tarea esperar· al sem·foro indefinidamente.
+// 5) Una tarea sensa un pulsador y libera un sem√°foro binario cuando confirma el fin de la pulsaci√≥n. 
+//	La otra tarea destella un led cuando recibe el sem√°foro. La tarea esperar√° al sem√°foro indefinidamente.
 
 //	ok	---------------------------------------------------------------------------------------------------------------
 
 // 6) Instanciar 3 veces la tarea que destella el led, cada una aplicada a un color del led RGB del base board y 
-//	hacer que las tres tareas generen el destello cuando se reciba el sem·foro. Las tareas esperar·n al sem·foro 
+//	hacer que las tres tareas generen el destello cuando se reciba el sem√°foro. Las tareas esperar√°n al sem√°foro 
 //	indefinidamente.
 
 //	ok	---------------------------------------------------------------------------------------------------------------
 
-// 7) Una tarea muestrea un pulsador y libera un sem·foro cuando confirma su liberaciÛn. Otra tarea espera el 
-//	sem·foro por 1s, encendiendo el led verde al recibir el sem·foro y encendiendo en cambio el rojo si expira 
+// 7) Una tarea muestrea un pulsador y libera un sem√°foro cuando confirma su liberaci√≥n. Otra tarea espera el 
+//	sem√°foro por 1s, encendiendo el led verde al recibir el sem√°foro y encendiendo en cambio el rojo si expira 
 //	el tiempo de bloqueo.
 
 //	ok	---------------------------------------------------------------------------------------------------------------
 
-// 8) Una tarea mide el tiempo de opresiÛn de un pulsador. Cuando lo obtiene lo envÌa por cola a otra tarea que 
+// 8) Una tarea mide el tiempo de opresi√≥n de un pulsador. Cuando lo obtiene lo env√≠a por cola a otra tarea que 
 //	destella una led durante el tiempo recibido.
 
 //	ok	---------------------------------------------------------------------------------------------------------------
 
-// 9) Una tarea destella contÌnuamente un led,con una frecuencia constante y un ciclo de actividad que recibe 
+// 9) Una tarea destella cont√≠nuamente un led,con una frecuencia constante y un ciclo de actividad que recibe 
 //	de otras tareas mediante una cola. Recuerde el uso de vTaskDelayUntil para mantener la periodicidad. 
 //	Nota: La tarea no debe bloquearse, ya que mientras no reciba mensajes debe mantener el led titilando.
 
 //	en teoria	---------------------------------------------------------------------------------------------------------------
 
 // 10) Repetir la tarea del ejemplo anterior, pero en vez de pasar el dato por cola, pasar la direccion del mismo.
-//	Recuerde usar variables globales para mantener v·lido el dato cuando la tarea sale de contexto.
+//	Recuerde usar variables globales para mantener v√°lido el dato cuando la tarea sale de contexto.
 
 //	en teoria	---------------------------------------------------------------------------------------------------------------
 
-// 11) Repetir el ejercicio 5 (sem·foro binario), pero agregue la posibilidad de que se contabilicen hasta 3 
-//	pulsaciones del botÛn, que a su vez generar·n 3 destellos del led.
+// 11) Repetir el ejercicio 5 (sem√°foro binario), pero agregue la posibilidad de que se contabilicen hasta 3 
+//	pulsaciones del bot√≥n, que a su vez generar√°n 3 destellos del led.
 
 //	ok	---------------------------------------------------------------------------------------------------------------
 
-// 12) Una tarea mide el tiempo de pulsaciÛn de un botÛn. Cuando se suelta el botÛn genera un pulso de esa misma
-//	duraciÛn  en un led.
+// 12) Una tarea mide el tiempo de pulsaci√≥n de un bot√≥n. Cuando se suelta el bot√≥n genera un pulso de esa misma
+//	duraci√≥n  en un led.
 //	Otra tarea mantiene una onda cuadrada de 1s, 50% en el mismo LED.
 //	Turnar el acceso al mismo mediante un mutex de modo que ninguna de las ondas se interrumpa.
 
 //	falla medidor de tiempo	---------------------------------------------------------------------------------------------------------------
 
-// 13) Generar un pulso en un led sincronizado a una interrupciÛn. Use un sem·foro binario dado en la interrupciÛn.
-//	NOTA: Tome como base el Ejemplo 12 de la teorÌa si necesita ayuda para generar interrupciones.
+// 13) Generar un pulso en un led sincronizado a una interrupci√≥n. Use un sem√°foro binario dado en la interrupci√≥n.
+//	NOTA: Tome como base el Ejemplo 12 de la teor√≠a si necesita ayuda para generar interrupciones.
 
 //---------------------------------------------------------------------------------------------------------------
 
