@@ -46,7 +46,7 @@ microcontrollers.
 
 ## Usage
 * Make sure you have an ```arm-none-eabi-*``` toolchain configured in your ```PATH```. If you don't have it, download [GCC ARM Embedded](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm).
-* ```git clone --recursive https://github.com/envido32/firmware_v2.git && cd workspace```
+* ```git clone --recursive https://github.com/envido32/eduCIAA-poncho-RFID.git && cd workspace```
 * ```cp project.mk.template project.mk```
 * Define ```PROJECT```, ```TARGET``` and ```BOARD``` (optional) variables in ```project.mk``` according to the project you want to compile.
 * Compile with ```make```.
