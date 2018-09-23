@@ -78,13 +78,13 @@ static void initHardware(void)
 
     Board_Init();
 
-    Board_LED_Set(0, false);
+    Board_LED_Set(0, FALSE);
 }
 
 static void task(void * a)
 {
 	while (1) {
-		Board_LED_Toggle(0);
+		Board_LED_Toggle(5); // eduCIAA LEDs: 0 to 2 RGB, 3 to 5 rest.
 		vTaskDelay(500 / portTICK_RATE_MS);
 	}
 }
@@ -95,7 +95,12 @@ int main(void)
 {
 	initHardware();
 
-	xTaskCreate(task, (const char *)"task", configMINIMAL_STACK_SIZE*2, 0, tskIDLE_PRIORITY+1, 0);
+	xTaskCreate(task, 						// pvTaskCode
+			(const char *)"task", 			// pcName
+			configMINIMAL_STACK_SIZE*2, 	// usStackDepth
+			0, 								// pvParameters
+			tskIDLE_PRIORITY+1, 			// uxPriority
+			0);								// pxCreatedTask
 
 	vTaskStartScheduler();
 
